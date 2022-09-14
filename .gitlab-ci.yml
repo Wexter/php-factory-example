@@ -1,0 +1,6 @@
+image: php:8.1
+
+test:
+  stage: test
+  script:
+    - php test.php
