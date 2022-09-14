@@ -4,6 +4,7 @@
 
     use ReflectionClass;
     use ReflectionException;
+    use Lib\Media\Image\Storage\Exception\ProviderNotFoundException;
 
     class ImageStorage {
         private const INTERFACE = __NAMESPACE__ . '\ImageStorageInterface';
@@ -60,7 +61,7 @@
          * Returns instance of requested storage provider
          * @param string $storageProvider Name of required storage provider
          * @return ImageStorageInterface
-         * @throws ImageStorageProviderNotFoundException if provider class was not found
+         * @throws ProviderNotFoundException if provider class was not found
          */
         public static function getStorage(string $storageProvider): ?ImageStorageInterface {
             $className = __NAMESPACE__ . '\Providers\\'. $storageProvider . 'ImageStorage';
@@ -69,9 +70,9 @@
                 $reflectionClass = new \ReflectionClass($className);
 
                 if (!$reflectionClass->implementsInterface(self::INTERFACE))
-                    throw new ImageStorageProviderNotFoundException("Provider \"{$storageProvider}\" not found");
+                    throw new ProviderNotFoundException("Provider \"{$storageProvider}\" not found");
             } catch (ReflectionException $e) {
-                throw new ImageStorageProviderNotFoundException("Provider \"{$storageProvider}\" not found");
+                throw new ProviderNotFoundException("Provider \"{$storageProvider}\" not found");
             }
 
             return new $className();
