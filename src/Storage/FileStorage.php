@@ -95,7 +95,7 @@
                     self::validateClass($providerClassName, self::STORAGE_PROVIDER_INTERFACE);
 
                     self::$providers[] = $providerName;
-                } catch (Exception $e) { echo $e->getMessage() . PHP_EOL; }
+                } catch (Exception $e) {}
             }
 
             self::$__providersRegistered = true;
