@@ -2,19 +2,20 @@
 
     namespace Lib\Storage;
 
-use Exception;
-use Lib\Storage\Exception\StorageProviderNotFoundException;
+    use Exception;
+    use Lib\Storage\Exception\ClassNotFoundException;
+    use Lib\Storage\Exception\ClassNotImplementedInterfaceException;
     use \ReflectionClass;
     use \ReflectionException;
 
     class FileStorage implements StorageInterface {
-        private const STORAGE_PROVIDER_INTERFACE = __NAMESPACE__ . '\StorageProviderInterface';
-        private const STORAGE_PROVIDER_BUILDER_INTERFACE = __NAMESPACE__ . '\StorageProviderBuilderInterface';
+        private const STORAGE_PROVIDER_INTERFACE = __NAMESPACE__ . '\ProviderInterface';
+        private const STORAGE_PROVIDER_BUILDER_INTERFACE = __NAMESPACE__ . '\ProviderBuilderInterface';
         private const PROVIDERS_NAMESPACE = __NAMESPACE__ . '\Providers';
 
         private static $providers = [];
         private static bool $__providersRegistered = false;
-        private StorageProviderInterface $storageProvider;
+        private ProviderInterface $storageProvider;
 
         public function __construct(string $storageProvider)
         {
@@ -46,7 +47,7 @@ use Lib\Storage\Exception\StorageProviderNotFoundException;
             return $this->storageProvider->listFiles($path);
         }
 
-        public function getProvider(): StorageProviderInterface
+        public function getProvider(): ProviderInterface
         {
             return $this->storageProvider;
         }
@@ -58,7 +59,7 @@ use Lib\Storage\Exception\StorageProviderNotFoundException;
          */
         private static function getProviderClass(string $providerName): string
         {
-            return self::PROVIDERS_NAMESPACE . "\\{$providerName}\\{$providerName}StorageProvider";
+            return self::PROVIDERS_NAMESPACE . "\\{$providerName}\\{$providerName}Provider";
         }
 
         /**
@@ -67,18 +68,16 @@ use Lib\Storage\Exception\StorageProviderNotFoundException;
          * @param string $interface Required interface
          * @return bool true if class is valid
          */
-        private static function validateClass(string $className, string $interface): bool
+        private static function validateClass(string $className, string $interface): void
         {
             try {
                 $reflectionClass = new ReflectionClass($className);
 
                 if (!$reflectionClass->implementsInterface($interface)) // class not implemented required interface, skip
-                    throw new StorageProviderNotFoundException("Provider \"{$className}\" not implemented {$interface}");
+                    throw new ClassNotImplementedInterfaceException("Provider \"{$className}\" not implemented {$interface}");
             } catch (ReflectionException $e) { // class not found, skip
-                throw new StorageProviderNotFoundException("Provider \"{$className}\" not found");
+                throw new ClassNotFoundException("Provider \"{$className}\" not found");
             }
-
-            return true;
         }
         /**
          * Searches available storage providers
@@ -96,20 +95,19 @@ use Lib\Storage\Exception\StorageProviderNotFoundException;
                     self::validateClass($providerClassName, self::STORAGE_PROVIDER_INTERFACE);
 
                     self::$providers[] = $providerName;
-                } catch (Exception $e) {}
+                } catch (Exception $e) { echo $e->getMessage() . PHP_EOL; }
             }
 
             self::$__providersRegistered = true;
         }
 
         /**
-         * Returns array of available storage providers
-         * @return array
+         * Returns list of available storage providers
+         * @return array List of available storage providers
          */
         public static function getProviders(): array
         {
-            if (!self::$__providersRegistered)
-                self::loadProviders();
+            self::loadProviders();
 
             return self::$providers;
         }

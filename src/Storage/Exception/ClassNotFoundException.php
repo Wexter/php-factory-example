@@ -4,4 +4,4 @@
 
     use Exception;
 
-    class StorageProviderNotFoundException extends Exception {}
+    class ClassNotFoundException extends Exception {}

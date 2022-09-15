@@ -3,7 +3,7 @@
     require_once './vendor/autoload.php';
 
     use Lib\Storage\FileStorage;
-    use Lib\Storage\StorageProviderInterface;
+    use Lib\Storage\ProviderInterface;
 
     $providers = FileStorage::getProviders();
 
@@ -14,7 +14,7 @@
 
         $provider = $fileStorage->getProvider();
 
-        var_dump($provider instanceof StorageProviderInterface);
+        var_dump($provider instanceof ProviderInterface);
 
         echo $provider->getName() . PHP_EOL;
     }

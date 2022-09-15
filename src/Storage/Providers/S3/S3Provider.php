@@ -4,7 +4,7 @@
 
     use Lib\Storage\AbstractStorageProvider;
 
-    class S3StorageProvider extends AbstractStorageProvider {
+    class S3Provider extends AbstractStorageProvider {
         public function __construct()
         {
             

@@ -2,7 +2,7 @@
 
     namespace Lib\Storage;
 
-    interface StorageProviderInterface extends StorageInterface {
+    interface ProviderInterface extends StorageInterface {
         /**
          * Returns provider name
          * @return string Provider name
