@@ -1,10 +1,10 @@
 <?php
 
-    namespace Lib\Storage\Providers;
+    namespace Lib\Storage\Providers\Directory;
 
     use Lib\Storage\AbstractStorageProvider;
 
-    class DatabaseStorageProvider extends AbstractStorageProvider {
+    class DirectoryStorageProvider extends AbstractStorageProvider {
         public function __construct()
         {
             

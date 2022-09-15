@@ -1,6 +1,6 @@
 <?php
 
-    namespace Lib\Storage\Providers;
+    namespace Lib\Storage\Providers\S3;
 
     use Lib\Storage\AbstractStorageProvider;
 
