@@ -92,8 +92,6 @@
                 $providerClassName = self::getProviderClass($providerName);
 
                 try {
-                    self::validateClass($providerClassName, self::STORAGE_PROVIDER_INTERFACE);
-
                     self::$providers[] = $providerName;
                 } catch (Exception $e) {}
             }
@@ -125,10 +123,10 @@
             $providerBuilderClassName = $providerClassName . 'Builder';
 
             // check provider class
-            self::validateClass($providerClassName, self::STORAGE_PROVIDER_INTERFACE);
+            // self::validateClass($providerClassName, self::STORAGE_PROVIDER_INTERFACE);
 
             // check provider builder class
-            self::validateClass($providerBuilderClassName, self::STORAGE_PROVIDER_BUILDER_INTERFACE);
+            // self::validateClass($providerBuilderClassName, self::STORAGE_PROVIDER_BUILDER_INTERFACE);
 
             $builder = new $providerBuilderClassName();
 
